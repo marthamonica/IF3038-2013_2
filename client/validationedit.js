@@ -109,6 +109,6 @@ var submitedit = document.getElementById("editbutton");
 				}
 			}
 		}
-		xmlhttp3.open("GET","http://localhost/_tubes4/authenticate?usr="+username+"&psw="+password,true);
+		xmlhttp3.open("GET","authentication.php?usr="+username+"&psw="+password,true);
 		xmlhttp3.send();
 	}

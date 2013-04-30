@@ -17,8 +17,8 @@ and open the template in the editor.
 			require "config.php";
 			require "request.php";
 			session_start();
-			$cur_username = $_SESSION['username'];
-			// $cur_username = "ArieDoank";
+			// $cur_username = $_SESSION['username'];
+			$cur_username = "ArieDoank";
 			$user_profile = json_decode(SendRequest("http://localhost/_tubes4/profile?username=$cur_username", 'GET', array()), true);
 			
 			$done_list = json_decode(SendRequest("http://localhost/_tubes4/getDoneList?username=$cur_username", 'GET', array()), true);
@@ -26,7 +26,7 @@ and open the template in the editor.
 			$undone_list = json_decode(SendRequest("http://localhost/_tubes4/getUndoneList?username=$cur_username", 'GET', array()), true);
 		?>
         <?php
-			require "header.php";
+			// require "header.php";
 		?>
         <div id="panel"></div>
         <div id="donelist">
@@ -66,26 +66,6 @@ and open the template in the editor.
 				<a onclick="editProfile();">Edit Profile</a>
 			</div>
         </div>
-		<div id='edit'>
-			<div id='editProfileForm'>
-					Full Name<br>
-					Date of birth<br>
-					Avatar<br>
-					Password<br>
-					Confirm Password<br>
-			</div>
-			<div id='inputEditProfile'>
-				<form id="editForm" method="post" action="editprofile.php" enctype="multipart/form-data">
-					<input type="text" name="editname" id="editname" value="<?php echo $current_user['fullname'];?>" pattern="^.+ .+$" required><img id="edit1" src=""><br>
-					<input type="date" name="editdob" id="editdob" value="<?php echo $current_user['birthday'];?>" onchange="dateChange2();"><img id="edit2" src=""><br>
-					<input type="file" name="editavatar" id="editavatar" onchange="checkImage2();"><img id="edit3" src=""><br>
-					<input type="password" name="editpassword1" id="editpassword1" pattern="^.{8,}$" required><img id="edit4" src=""><br>
-					<input type="password" name="editpassword2" id="editpassword2" pattern="^.{8,}$" required><img id="edit5" src=""><br>
-					<input type="submit" id="editbutton" value="edit">
-					<input type="button" onclick="profileRestore();" value="cancel">
-				</form>
-			</div>
-		</div>
 	<script type="text/javascript" src="validationedit.js"></script>
 	<script type="text/javascript" src="script.js"></script>
     </body>
