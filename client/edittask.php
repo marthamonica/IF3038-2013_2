@@ -28,7 +28,7 @@ and open the template in the editor.
 			<img src="img/kertas2.png">
 		</div>
 		<div class="tugas" id="edittask"><br/>
-			<form id="editTaskForm" method="post" action="ubahtask.php?idtask=<?php echo $id;?>" enctype="multipart/form-data">
+			<form id="editTaskForm" method="post" action="http://localhost/_tubes4/?idtask=<?php echo $id;?>" enctype="multipart/form-data">
                 Task Name: 
 				<div class="nama">
 				<?php	

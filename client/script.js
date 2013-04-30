@@ -417,7 +417,7 @@ function showTask(str){
 			  }
 		  }
 	  }
-	xmlhttp2.open("GET","showTask.php?q="+str,true);
+	xmlhttp2.open("GET","http://localhost/_tubes4/showTask?q="+str,true);
 	xmlhttp2.send();
 }
 
@@ -447,7 +447,7 @@ function deletekategori()
 			}
 		  }
 	  }
-	xmlhttp4.open("GET","hapusKategori.php?q="+t,true);
+	xmlhttp4.open("GET","http://localhost/_tubes4/hapusKategori?q="+t,true);
 	xmlhttp4.send();
 }
 
@@ -476,7 +476,7 @@ function deletetask(str)
 			}
 		  }
 	  }
-	xmlhttp5.open("GET","hapusTask.php?q="+str,true);
+	xmlhttp5.open("GET","http://localhost/_tubes4/hapusTask?q="+str,true);
 	xmlhttp5.send();
 }
 
@@ -503,7 +503,7 @@ function cektugasdone(str){
 			}
 		  }
 	  }
-	xmlhttp9.open("GET","checkTask.php?q="+str,true);
+	xmlhttp9.open("GET","http://localhost/_tubes4/checkTask?q="+str,true);
 	xmlhttp9.send();
 }
 
@@ -587,7 +587,7 @@ function showStatus(id){
 				document.getElementById("status_detail").innerHTML=result;
 			}
 		}
-	xmlhttp2.open("GET","showStatus.php?id="+id,true);
+	xmlhttp2.open("GET","http://localhost/_tubes4/showStatus?id="+id,true);
 	xmlhttp2.send();
 }
 
@@ -615,7 +615,7 @@ function showAssignee(id){
 				document.getElementById("assignee").innerHTML=result;
 			}
 		}
-	xmlhttp3.open("GET","showAssignee.php?q="+id,true);
+	xmlhttp3.open("GET","http://localhost/_tubes4/showAssignee?q="+id,true);
 	xmlhttp3.send();
 }
 
@@ -637,7 +637,7 @@ function showTags(id){
 				document.getElementById("tag").innerHTML=result;
 			}
 		}
-	xmlhttp4.open("GET","showTags.php?q="+id,true);
+	xmlhttp4.open("GET","http://localhost/_tubes4/showTags?q="+id,true);
 	xmlhttp4.send();
 }
 
@@ -678,7 +678,7 @@ function showAttachment(id){
 				document.getElementById("attachment").innerHTML=result;
 			}
 		}
-	xmlhttp5.open("GET","showAttachment.php?q="+id,true);
+	xmlhttp5.open("GET","http://localhost/_tubes4/showAttachment?q="+id,true);
 	xmlhttp5.send();
 }
 
@@ -713,7 +713,7 @@ function showComment(id){
 				document.getElementById("list_comment").innerHTML=result;
 			}
 		}
-	xmlhttp7.open("GET","showComment.php?q="+id,true);
+	xmlhttp7.open("GET","http://localhost/_tubes4/showComment?q="+id,true);
 	xmlhttp7.send();
 }
 
@@ -741,7 +741,7 @@ function deleteComment(str){
 			}
 		  }
 	  }
-	xmlhttp8.open("GET","hapusComment.php?q="+str,true);
+	xmlhttp8.open("GET","http://localhost/_tubes4/hapusComment?q="+str,true);
 	xmlhttp8.send();
 }
 
@@ -774,7 +774,7 @@ function storeComment(id){
 				}
 			}
 		}
-	xmlhttp6.open("GET","storeComment.php?q="+comment+"&id="+id,true);
+	xmlhttp6.open("GET","http://localhost/_tubes4/storeComment?q="+comment+"&id="+id,true);
 	xmlhttp6.send();
 }
 
@@ -803,6 +803,6 @@ function deleteTask(str)
 			}
 		  }
 	  }
-	xmlhttp.open("GET","hapusTask.php?q="+str,true);
+	xmlhttp.open("GET","http://localhost/_tubes4/hapusTask?q="+str,true);
 	xmlhttp.send();
 }
