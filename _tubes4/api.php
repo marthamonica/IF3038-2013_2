@@ -118,6 +118,143 @@
 			$this->response($this->json($result),200);
 		}		
 
+		public function authenticate(){
+		
+			$usr=$this->_request["usr"];
+			$psw=$this->_request["psw"];
+			
+			$num_row_query = "SELECT * FROM user WHERE username='$usr' AND password='$psw'";
+			
+			$data = mysql_query( $num_row_query);
+			$result = mysql_fetch_array($data);
+			$row_cnt = mysql_num_rows($data);
+			
+			if($row_cnt > 0){
+				//SET SESSION
+				session_start();
+				$_SESSION['username'] = $result['username'];
+				$_SESSION['fullname'] = $result['fullname'];
+				$_SESSION['birthday'] = $result['birthday'];
+				$_SESSION['password'] = $result['password'];
+				$_SESSION['email'] = $result['email'];
+				$_SESSION['IsEdit'] = false;
+				//SET COOKIES, EXPIRED 30 DAYS
+				$expire=time()+60*60*24*30;
+				setcookie("username", $result['username'], $expire);
+				setcookie("fullname", $result['fullname'], $expire);
+				setcookie("birthday", $result['birthday'], $expire);
+				setcookie("password", $result['password'], $expire);
+				setcookie("email", $result['email'], $expire);
+			}
+			/* close connection */
+			//$mysqli->close();
+			echo $row_cnt;
+		}
+		
+		public function autoassignee(){
+			$q=$this->_request["q"];
+
+			if(strlen($q) > 0){
+				$hint="";
+				$sql="SELECT username FROM user WHERE username LIKE '%$q%'";
+				$user = mysql_query($sql);
+				$hasiluser = array();
+				while(($user != null) && ($current_user = mysql_fetch_array($user)))
+				{
+					$hasiluser[] = $current_user['username'];
+				}
+				
+				if (count($hasiluser) > 0)
+				{
+					for($i=0; $i<count($hasiluser); $i++)
+					{
+						if (strtolower($q)==strtolower(substr($hasiluser[$i],0,strlen($q))))
+						{
+							$hint .= "<br>".$hasiluser[$i];
+						}
+					}
+					//$hint.=",";
+				}
+				if ($hint == ""){
+					$response="";
+				}else{
+					$response=$hint;
+				}
+				//output the response
+				echo $response;
+			}
+		}
+		
+		public function autotag(){
+					
+			$q=$this->_request["q"];
+			require "config.php";
+
+			if(strlen($q) > 0){
+				$hint="";
+				$sql="SELECT name FROM tag WHERE name LIKE '%$q%'";
+				$tag = mysql_query($sql);
+				$hasiltag = array();
+				while(($tag != null) && ($current_tag = mysql_fetch_array($tag)))
+				{
+					$hasiltag[] = $current_tag['name'];
+				}
+				
+				if (count($hasiltag) > 0)
+				{
+					for($i=0; $i<count($hasiltag); $i++)
+					{
+						if (strtolower($q)==strtolower(substr($hasiltag[$i],0,strlen($q))))
+						{
+							$hint .= "<br>".$hasiltag[$i];
+						}
+					}
+					//$hint.=",";
+				}
+				if ($hint == ""){
+					$response="";
+				}else{
+					$response=$hint;
+				}
+				//output the response
+				echo $response;
+			}
+		}
+		
+		public function autoassignee(){
+			$q=$this->_request["q"];
+
+			if(strlen($q) > 0){
+				$hint="";
+				$sql="SELECT username FROM user WHERE username LIKE '%$q%'";
+				$user = mysql_query($sql);
+				$hasiluser = array();
+				while(($user != null) && ($current_user = mysql_fetch_array($user)))
+				{
+					$hasiluser[] = $current_user['username'];
+				}
+				
+				if (count($hasiluser) > 0)
+				{
+					for($i=0; $i<count($hasiluser); $i++)
+					{
+						if (strtolower($q)==strtolower(substr($hasiluser[$i],0,strlen($q))))
+						{
+							$hint .= "<br>".$hasiluser[$i];
+						}
+					}
+					//$hint.=",";
+				}
+				if ($hint == ""){
+					$response="";
+				}else{
+					$response=$hint;
+				}
+				//output the response
+				echo $response;
+			}
+		}
+		
 		//END OF MAMON
 		
 		/*

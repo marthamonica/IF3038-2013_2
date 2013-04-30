@@ -68,7 +68,7 @@ function showAssignee(str)
 			}
 	   }
 	  }
-	xmlhttp.open("GET","autoassignee.php?q="+s,true);
+	xmlhttp.open("GET","http://localhost/_tubes4/autoassignee?q="+s,true);
 	xmlhttp.send();
 }
 
@@ -136,7 +136,7 @@ function showTag(str)
 			}
 	   }
 	  }
-	xmlhttp.open("GET","autotag.php?q="+s,true);
+	xmlhttp.open("GET","http://localhost/_tubes4/autotag?q="+s,true);
 	xmlhttp.send();
 }
 

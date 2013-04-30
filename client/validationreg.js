@@ -54,7 +54,7 @@ var valid7bool;
 				}
 			}
 		}
-		xmlhttp.open("GET","getuser.php?q="+username.value,true);
+		xmlhttp.open("GET","http://localhost/_tubes4/getuser?q="+username.value,true);
 		xmlhttp.send();
 	}
 	
@@ -153,7 +153,8 @@ var valid7bool;
 				}
 			}
 		}
-		xmlhttp.open("GET","getemail.php?",true);
+		
+		xmlhttp.open("GET","http://localhost/_tubes4/getemail?q="+email.value,true);
 		xmlhttp.send();
 	}
 	
