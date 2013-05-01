@@ -83,7 +83,7 @@ function showAssignee(str)
 			}
 	   }
 	  }
-	xmlhttp.open("GET","http://localhost/_tubes4/autoassignee.php?q="+s,true);
+	xmlhttp.open("GET","http://nicholasrio.ap01.aws.af.cm/rest/autoassignee?q="+s,true);
 	xmlhttp.send();
 }
 
@@ -151,7 +151,7 @@ function showTag(str)
 			}
 	   }
 	  }
-	xmlhttp.open("GET","autotag.php?q="+s,true);
+	xmlhttp.open("GET","http://nicholasrio.ap01.aws.af.cm/rest/autotag?q="+s,true);
 	xmlhttp.send();
 }
 

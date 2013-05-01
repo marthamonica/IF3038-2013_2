@@ -1,22 +1,7 @@
 //registration form variabel
-var taskName = document.getElementById("namaTask");
 var valid1;
 var valid3;
-var valid6;
-var submitcreate = document.getElementById("createbut");
-	
-	taskName.onkeyup = function()
-	{
-		if (taskName.checkValidity()){
-			validtask1.src = "img/benar.png";
-			valid1=true;
-		}
-		else
-		{
-			validtask1.src = "img/salah.png";
-			valid1=false;
-		}
-	}
+var submitcreate = document.getElementById("editbut");
 	
 	function changeDeadline()
 	{
@@ -40,8 +25,8 @@ function showAssignee(str)
 	
 	if (s.length==0)
 	  { 
-	  document.getElementById("hasilsearchassignee").innerHTML="";
-	  document.getElementById("hasilsearchassignee").style.visibility="hidden";
+	  document.getElementById("hasilsearchassigneeedit").innerHTML="";
+	  document.getElementById("hasilsearchassigneeedit").style.visibility="hidden";
 	  return;
 	  }
 	
@@ -73,17 +58,17 @@ function showAssignee(str)
 			if (check)
 			{
 				result += "</ul>";
-				document.getElementById("hasilsearchassignee").innerHTML=result;
-				document.getElementById("hasilsearchassignee").style.visibility="visible";
+				document.getElementById("hasilsearchassigneeedit").innerHTML=result;
+				document.getElementById("hasilsearchassigneeedit").style.visibility="visible";
 			}
 			else
 			{
-				document.getElementById("hasilsearchassignee").innerHTML="";
-				document.getElementById("hasilsearchassignee").style.visibility="none";
+				document.getElementById("hasilsearchassigneeedit").innerHTML="";
+				document.getElementById("hasilsearchassigneeedit").style.visibility="none";
 			}
 	   }
 	  }
-	xmlhttp.open("GET","http://localhost/_tubes4/autoassignee.php?q="+s,true);
+	xmlhttp.open("GET","http://nicholasrio.ap01.aws.af.cm/rest/autoassignee?q="+s,true);
 	xmlhttp.send();
 }
 
@@ -97,8 +82,8 @@ function auto_complete_assignee(str)
 		var last = str+",";
 	}
 	document.getElementById("Assignee").value = last;
-	document.getElementById("hasilsearchassignee").innerHTML="";
-	document.getElementById("hasilsearchassignee").style.visibility="none";
+	document.getElementById("hasilsearchassigneeedit").innerHTML="";
+	document.getElementById("hasilsearchassigneeedit").style.visibility="none";
 }
 
 function showTag(str)
@@ -141,17 +126,17 @@ function showTag(str)
 			if (check)
 			{
 				result += "</ul>";
-				document.getElementById("hasilsearchtag2").innerHTML=result;
-				document.getElementById("hasilsearchtag2").style.visibility="visible";
+				document.getElementById("hasilsearchtag").innerHTML=result;
+				document.getElementById("hasilsearchtag").style.visibility="visible";
 			}
 			else
 			{
-				document.getElementById("hasilsearchtag2").innerHTML="";
-				document.getElementById("hasilsearchtag2").style.visibility="none";
+				document.getElementById("hasilsearchtag").innerHTML="";
+				document.getElementById("hasilsearchtag").style.visibility="none";
 			}
 	   }
 	  }
-	xmlhttp.open("GET","autotag.php?q="+s,true);
+	xmlhttp.open("GET","http://nicholasrio.ap01.aws.af.cm/rest/autotag?q="+s,true);
 	xmlhttp.send();
 }
 
@@ -165,6 +150,6 @@ function auto_complete_tag(str)
 		var last = str+",";
 	}
 	document.getElementById("tag").value = last;
-	document.getElementById("hasilsearchtag2").innerHTML="";
-	document.getElementById("hasilsearchtag2").style.visibility="none";
+	document.getElementById("hasilsearchtag").innerHTML="";
+	document.getElementById("hasilsearchtag").style.visibility="none";
 }

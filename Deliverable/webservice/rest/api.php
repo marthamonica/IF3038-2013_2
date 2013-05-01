@@ -6,16 +6,26 @@ class API extends REST {
 
     public $data = "";
 
-    const DB_SERVER = "localhost";
-    const DB_USER = "progin";
-    const DB_PASSWORD = "progin";
-    const DB = "progin_405_13510032";
-
-    private $db = NULL;
+    // $services_json = json_decode(getenv("VCAP_SERVICES"),true);
+	// $mysql_config = $services_json["mysql-5.1"][0]["credentials"];
+	// $db_username = $mysql_config["username"];
+	// $db_password = $mysql_config["password"];
+	// $db_hostname = $mysql_config["hostname"];
+	// $port = $mysql_config["port"];
+	// $db = $mysql_config["name"];
 
     public function __construct() {
         parent::__construct();    // Init parent contructor
-        $this->dbConnect();     // Initiate Database connection
+		$services_json = json_decode(getenv("VCAP_SERVICES"),true);
+		$mysql_config = $services_json["mysql-5.1"][0]["credentials"];
+		$db_username = $mysql_config["username"];
+		$db_password = $mysql_config["password"];
+		$db_hostname = $mysql_config["hostname"];
+		$port = $mysql_config["port"];
+		$db = $mysql_config["name"];
+		$con = mysql_connect("$db_hostname:$port", $db_username, $db_password);
+		$db_selected = mysql_select_db($db, $con);
+        //$this->dbConnect();     // Initiate Database connection
     }
 
     /*
@@ -23,9 +33,8 @@ class API extends REST {
      */
 
     private function dbConnect() {
-        $this->db = mysql_connect(self::DB_SERVER, self::DB_USER, self::DB_PASSWORD);
-        if ($this->db)
-            mysql_select_db(self::DB, $this->db);
+        $con = mysql_connect("$db_hostname:$port", $db_username, $db_password);
+		$db_selected = mysql_select_db($db, $con);
     }
 
     /*
@@ -46,16 +55,16 @@ class API extends REST {
             print "no request<br/>";
         }
     }
-
-    public function edit() {
-        $username = $_GET['username'];
-        $editfullname = $_GET['editname'];
-        $editdob = $_GET['editdob'];
-        $editpassword = $_GET['editpassword1'];
-        $edit_sql = "UPDATE user SET fullname='$editfullname', birthday='$editdob',password='$editpassword' WHERE username ='$username'";
-        mysql_query($edit_sql);
-        $this->response("OK", 200);
-    }
+	
+	public function edit(){
+		$username = $_GET['username'];
+		$editfullname = $_GET['editname'];
+		$editdob = $_GET['editdob'];
+		$editpassword = $_GET['editpassword1'];
+		$edit_sql = "UPDATE user SET fullname='$editfullname', birthday='$editdob',password='$editpassword' WHERE username ='$username'";
+		mysql_query($edit_sql);
+		$this->response("OK",200);
+	}
 
     public function profile() {
         if ($this->get_request_method() != "GET") {
@@ -470,111 +479,121 @@ class API extends REST {
         echo $response;
     }
 
-    public function allkategori() {
-        $username = $this->_request['username'];
-        $sql = "SELECT name FROM category WHERE id_cat in (SELECT id_cat FROM joincategory WHERE username='$username') UNION SELECT name FROM category WHERE id_cat in (SELECT id_cat FROM categorycreator WHERE username='$username')";
-        $user = mysql_query($sql);
-        $hasil = "";
-        while (($user != null) && ($data = mysql_fetch_array($user, MYSQL_ASSOC))) {
-            $hasil .= "<br>" . $data['name'];
-        }
+	public function allkategori(){
+		$username = $this->_request['username'];
+		$sql = "SELECT name FROM category WHERE id_cat in (SELECT id_cat FROM joincategory WHERE username='$username') UNION SELECT name FROM category WHERE id_cat in (SELECT id_cat FROM categorycreator WHERE username='$username')";
+		$user = mysql_query($sql);
+		$hasil = "";
+		while(($user != null) && ($data = mysql_fetch_array($user,MYSQL_ASSOC)))
+		{
+			$hasil .= "<br>".$data['name'];
+		}
+	
+		if ($hasil == "")
+		{
+			$response="";
+		}
+		else
+		{
+		  $response=$hasil;
+		}
 
-        if ($hasil == "") {
-            $response = "";
-        } else {
-            $response = $hasil;
-        }
+		//output the response
+		echo $response;
+	}
+	
+	public function getuser(){
+		$username = $this->_request['q'];
+		$row_cnt = 0;
+		$getusername_sql = "SELECT username FROM user WHERE username = '$username'";
+		if ($getuser_result = mysql_query($getusername_sql)) {
+			/* determine number of rows result set */
+			$row_cnt = mysql_num_rows($getuser_result);
+		}
+		echo $row_cnt;
+	}
+	
+	public function getemail(){
+		$email = $this->_request['q'];
+		$getemail_sql = "SELECT username FROM user WHERE email = '$email'";
+		if ($getemail_result = mysql_query($getemail_sql)) {
+			/* determine number of rows result set */
+			$row_cnt = mysql_num_rows($getemail_result);
+		}
+		echo $row_cnt;
+	}
+	
+	public function autotag(){
+					
+			$q=$this->_request["q"];
+			require "config.php";
 
-        //output the response
-        echo $response;
-    }
+			if(strlen($q) > 0){
+				$hint="";
+				$sql="SELECT name FROM tag WHERE name LIKE '%$q%'";
+				$tag = mysql_query($sql);
+				$hasiltag = array();
+				while(($tag != null) && ($current_tag = mysql_fetch_array($tag)))
+				{
+					$hasiltag[] = $current_tag['name'];
+				}
+				
+				if (count($hasiltag) > 0)
+				{
+					for($i=0; $i<count($hasiltag); $i++)
+					{
+						if (strtolower($q)==strtolower(substr($hasiltag[$i],0,strlen($q))))
+						{
+							$hint .= "<br>".$hasiltag[$i];
+						}
+					}
+					//$hint.=",";
+				}
+				if ($hint == ""){
+					$response="";
+				}else{
+					$response=$hint;
+				}
+				//output the response
+				echo $response;
+			}
+		}
+		
+		public function autoassignee(){
+			$q=$this->_request["q"];
 
-    public function getuser() {
-        $username = $this->_request['q'];
-        $row_cnt = 0;
-        $getusername_sql = "SELECT username FROM user WHERE username = '$username'";
-        if ($getuser_result = mysql_query($getusername_sql)) {
-            /* determine number of rows result set */
-            $row_cnt = mysql_num_rows($getuser_result);
-        }
-        echo $row_cnt;
-    }
-
-    public function getemail() {
-        $email = $this->_request['q'];
-        $getemail_sql = "SELECT username FROM user WHERE email = '$email'";
-        if ($getemail_result = mysql_query($getemail_sql)) {
-            /* determine number of rows result set */
-            $row_cnt = mysql_num_rows($getemail_result);
-        }
-        echo $row_cnt;
-    }
-
-    public function autotag() {
-
-        $q = $this->_request["q"];
-        require "config.php";
-
-        if (strlen($q) > 0) {
-            $hint = "";
-            $sql = "SELECT name FROM tag WHERE name LIKE '%$q%'";
-            $tag = mysql_query($sql);
-            $hasiltag = array();
-            while (($tag != null) && ($current_tag = mysql_fetch_array($tag))) {
-                $hasiltag[] = $current_tag['name'];
-            }
-
-            if (count($hasiltag) > 0) {
-                for ($i = 0; $i < count($hasiltag); $i++) {
-                    if (strtolower($q) == strtolower(substr($hasiltag[$i], 0, strlen($q)))) {
-                        $hint .= "<br>" . $hasiltag[$i];
-                    }
-                }
-                //$hint.=",";
-            }
-            if ($hint == "") {
-                $response = "";
-            } else {
-                $response = $hint;
-            }
-            //output the response
-            echo $response;
-        }
-    }
-
-    public function autoassignee() {
-        $q = $this->_request["q"];
-
-        if (strlen($q) > 0) {
-            $hint = "";
-            $sql = "SELECT username FROM user WHERE username LIKE '%$q%'";
-            $user = mysql_query($sql);
-            $hasiluser = array();
-            while (($user != null) && ($current_user = mysql_fetch_array($user))) {
-                $hasiluser[] = $current_user['username'];
-            }
-
-            if (count($hasiluser) > 0) {
-                for ($i = 0; $i < count($hasiluser); $i++) {
-                    if (strtolower($q) == strtolower(substr($hasiluser[$i], 0, strlen($q)))) {
-                        $hint .= "<br>" . $hasiluser[$i];
-                    }
-                }
-                //$hint.=",";
-            }
-            if ($hint == "") {
-                $response = "";
-            } else {
-                $response = $hint;
-            }
-            //output the response
-            echo $response;
-        }
-    }
-
-    // MAMON
-
-    public function rincitugas() {
+			if(strlen($q) > 0){
+				$hint="";
+				$sql="SELECT username FROM user WHERE username LIKE '%$q%'";
+				$user = mysql_query($sql);
+				$hasiluser = array();
+				while(($user != null) && ($current_user = mysql_fetch_array($user)))
+				{
+					$hasiluser[] = $current_user['username'];
+				}
+				
+				if (count($hasiluser) > 0)
+				{
+					for($i=0; $i<count($hasiluser); $i++)
+					{
+						if (strtolower($q)==strtolower(substr($hasiluser[$i],0,strlen($q))))
+						{
+							$hint .= "<br>".$hasiluser[$i];
+						}
+					}
+					//$hint.=",";
+				}
+				if ($hint == ""){
+					$response="";
+				}else{
+					$response=$hint;
+				}
+				//output the response
+				echo $response;
+			}
+		}
+	
+	public function rincitugas() {
         if ($this->get_request_method() != "GET") {
             $this->response('', 406);     // IF not GET method
         }
@@ -633,68 +652,6 @@ class API extends REST {
         }
 
         $this->response($this->json($result), 200);
-    }
-
-    public function autotag() {
-
-        $q = $this->_request["q"];
-        require "config.php";
-
-        if (strlen($q) > 0) {
-            $hint = "";
-            $sql = "SELECT name FROM tag WHERE name LIKE '%$q%'";
-            $tag = mysql_query($sql);
-            $hasiltag = array();
-            while (($tag != null) && ($current_tag = mysql_fetch_array($tag))) {
-                $hasiltag[] = $current_tag['name'];
-            }
-
-            if (count($hasiltag) > 0) {
-                for ($i = 0; $i < count($hasiltag); $i++) {
-                    if (strtolower($q) == strtolower(substr($hasiltag[$i], 0, strlen($q)))) {
-                        $hint .= "<br>" . $hasiltag[$i];
-                    }
-                }
-                //$hint.=",";
-            }
-            if ($hint == "") {
-                $response = "";
-            } else {
-                $response = $hint;
-            }
-            //output the response
-            echo $response;
-        }
-    }
-
-    public function autoassignee() {
-        $q = $this->_request["q"];
-
-        if (strlen($q) > 0) {
-            $hint = "";
-            $sql = "SELECT username FROM user WHERE username LIKE '%$q%'";
-            $user = mysql_query($sql);
-            $hasiluser = array();
-            while (($user != null) && ($current_user = mysql_fetch_array($user))) {
-                $hasiluser[] = $current_user['username'];
-            }
-
-            if (count($hasiluser) > 0) {
-                for ($i = 0; $i < count($hasiluser); $i++) {
-                    if (strtolower($q) == strtolower(substr($hasiluser[$i], 0, strlen($q)))) {
-                        $hint .= "<br>" . $hasiluser[$i];
-                    }
-                }
-                //$hint.=",";
-            }
-            if ($hint == "") {
-                $response = "";
-            } else {
-                $response = $hint;
-            }
-            //output the response
-            echo $response;
-        }
     }
 
     public function showTags() {
@@ -847,7 +804,8 @@ class API extends REST {
     public function showComment() {
         //include "login.php";
         //$username = $_SESSION['username'];
-        $username = "ArieDoank";
+        // $username = "ArieDoank";
+		// $username = $this->_request['username'];
         $id_task = $this->_request['q'];
 
         $result = "";
@@ -881,25 +839,23 @@ class API extends REST {
     }
 
     public function storeComment() {
-        //include "login.php";
         //$username = $_SESSION['username'];
-        $username = "ArieDoank";
+		$username = $this->_request['username'];
+        // $username = "ArieDoank";
         $id_task = $this->_request['id'];
         $q = $this->_request['q']; //comment
         $tanggal = getdate();
         $current_date = "";
         $current_date .= ($tanggal['hours'] - 6) . " : " . $tanggal['minutes'] . " - " . $tanggal['mday'] . "/" . $tanggal['mon'];
-
-        require "config.php";
         $result = "";
 
-        $sql_user = "SELECT pemilik FROM task WHERE id_task='$id_task'";
-        $user = mysql_query($sql_user);
-        $user_fetched = mysql_fetch_array($user);
-        $pemilik = $user_fetched['pemilik'];
+        // $sql_user = "SELECT pemilik FROM task WHERE id_task='$id_task'";
+        // $user = mysql_query($sql_user);
+        // $user_fetched = mysql_fetch_array($user);
+        // $pemilik = $user_fetched['pemilik'];
 
         //ALL IN DUMMY HERE
-        if ($update_comment = "INSERT INTO `comment`(`id_task`, `username`, `time`, `content`) VALUES ('$id_task','$pemilik','$current_date','$q')") {
+        if ($update_comment = "INSERT INTO `comment`(`id_task`, `username`, `time`, `content`) VALUES ('$id_task','$username','$current_date','$q')") {
             mysql_query($update_comment);
             echo "";
         } else {
@@ -907,7 +863,7 @@ class API extends REST {
         }
     }
 
-    public function ubahtask() {
+    public function ubah() {
         $id_task = $this->_request['idtask'];
         //dummy here
         $username = "ArieDoank";
@@ -946,13 +902,13 @@ class API extends REST {
             mysql_query($sqljoincat);
         }
 
-        $tag = $_POST['tag'];
+        $tag = $_REQUEST['tag'];
         $array_tag = explode(",", $tag);
         $arraylength2 = count($array_tag);
         for ($j = 0; $j < $arraylength2; $j++) {
             $searchtagsql = "SELECT name FROM tag WHERE name='$array_tag[$j]'";
             if ($getsearchtagresult = mysql_query($searchtagsql)) {
-                $row_count = mysqli_num_rows($getsearchtagresult);
+                $row_count = mysql_num_rows($getsearchtagresult);
             }
             if ($row_count === 0) {
                 $sqltag = "INSERT INTO tag(`name`) VALUES ('$array_tag[$j]')";
@@ -967,11 +923,11 @@ class API extends REST {
             $sqltasktag = "INSERT INTO tasktag(`id_task`, `id_tag`) VALUES ('$id_task','$id_tag')";
             mysql_query($sqltasktag);
         }
-        header("Location: rincitask.php?idtask=$id_task");
+        //header("Location: rincitask.php?idtask=$id_task"); //ga bisa bukan?
     }
 
     //END OF MAMON
-
+	
     /*
      * 	Encode array into JSON
      */

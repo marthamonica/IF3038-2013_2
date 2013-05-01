@@ -21,7 +21,9 @@ and open the template in the editor.
 		</script>
     </head>
     <body>
-        
+        <?php
+			require "header.php";
+		?>
 		<div id="category">
 			
 		</div>
@@ -32,7 +34,7 @@ and open the template in the editor.
                 <b>Task Name : </b>
 				<?php
 					// session_start();
-					$user_task = json_decode(SendRequest("http://localhost/_tubes4/rincitugas?idtask=$id", 'GET', array()), true);
+					$user_task = json_decode(SendRequest("http://nicholasrio.ap01.aws.af.cm/rest/rincitugas?idtask=$id", 'GET', array()), true);
 					print $user_task['name'];
 					print "<br />";
 				?>
@@ -59,7 +61,7 @@ and open the template in the editor.
 				<b>Submit Your Comment: </b><br/>
                 <form id="submit_comment">
                     <textArea id="comment"></textarea>
-                    <input type="button" name="submit" value="Submit" onClick="storeComment(<?php echo $id;?>);">
+                    <input type="button" name="submit" value="Submit" onClick="storeComment(<?php echo $id;?>,'<?php echo $username;?>');">
                 </form>
 				
                 <br/><br/>

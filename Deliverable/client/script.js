@@ -44,6 +44,10 @@ function Redirect() {
     window.location = "index.php";
 }
 
+function rinciRedirect(id){
+	window.location = "rincitask.php?id="+id;
+}
+
 function edit() {
     if ((document.getElementById("regname").value.indexOf(" ") < 0)) {
         //alert("Name should be constructed by two or more words separated by space.");
@@ -220,7 +224,7 @@ function showHint(str,username)
             }
         }
     }
-    xmlhttp.open("GET", "http://localhost/_tubes4/autosearch?q=" + str + "&tipe=" + tipe + "&username=" + username, true);
+    xmlhttp.open("GET", "http://nicholasrio.ap01.aws.af.cm/rest/autosearch?q=" + str + "&tipe=" + tipe + "&username=" + username, true);
     xmlhttp.send();
 }
 
@@ -290,7 +294,7 @@ function showKategori(username) {
             }
         }
     }
-    xmlhttp.open("GET", "http://localhost/_tubes4/allkategori?username="+username, true);
+    xmlhttp.open("GET", "http://nicholasrio.ap01.aws.af.cm/rest/allkategori?username="+username, true);
     xmlhttp.send();
 }
 
@@ -391,7 +395,7 @@ function showTask(str,username) {
             }
         }
     }
-    xmlhttp2.open("GET", "http://localhost/_tubes4/showTask?q=" + str +"&username="+username, true);
+    xmlhttp2.open("GET", "http://nicholasrio.ap01.aws.af.cm/rest/showTask?q=" + str +"&username="+username, true);
     xmlhttp2.send();
 }
 
@@ -421,7 +425,7 @@ function deletekategori(username)
             }
         }
     }
-    xmlhttp4.open("GET", "http://localhost/_tubes4/hapusKategori?q="+t,true);
+    xmlhttp4.open("GET", "http://nicholasrio.ap01.aws.af.cm/rest/hapusKategori?q="+t,true);
     xmlhttp4.send();
 }
 
@@ -450,7 +454,7 @@ function deletetask(str)
             }
         }
     }
-    xmlhttp5.open("GET", "hapusTask.php?q=" + str, true);
+    xmlhttp5.open("GET", "http://nicholasrio.ap01.aws.af.cm/rest/hapusTask?q=" + str, true);
     xmlhttp5.send();
 }
 
@@ -477,7 +481,7 @@ function cektugasdone(str) {
             }
         }
     }
-    xmlhttp9.open("GET", "http://localhost/_tubes4/checkTask?q="+str,true);
+    xmlhttp9.open("GET", "http://nicholasrio.ap01.aws.af.cm/rest/checkTask?q="+str,true);
     xmlhttp9.send();
 }
 
@@ -513,7 +517,7 @@ function Loginaja() {
             }
         }
     }
-    xmlhttp3.open("GET", "http://localhost/_tubes4/authentication?usr=" + username + "&psw=" + password, true);
+    xmlhttp3.open("GET", "http://nicholasrio.ap01.aws.af.cm/rest/authentication?usr=" + username + "&psw=" + password, true);
     xmlhttp3.send();
 }
 
@@ -561,7 +565,7 @@ function showStatus(id) {
             document.getElementById("status_detail").innerHTML = result;
         }
     }
-    xmlhttp2.open("GET","http://localhost/_tubes4/showStatus?id="+id,true);
+    xmlhttp2.open("GET","http://nicholasrio.ap01.aws.af.cm/rest/showStatus?id="+id,true);
     xmlhttp2.send();
 }
 
@@ -589,7 +593,7 @@ function showAssignee(id) {
             document.getElementById("assignee").innerHTML = result;
         }
     }
-	xmlhttp3.open("GET","http://localhost/_tubes4/showAssignee?q="+id,true);
+	xmlhttp3.open("GET","http://nicholasrio.ap01.aws.af.cm/rest/showAssignee?q="+id,true);
     xmlhttp3.send();
 }
 
@@ -611,7 +615,7 @@ function showTags(id) {
             document.getElementById("tag").innerHTML = result;
         }
     }
-	xmlhttp4.open("GET","http://localhost/_tubes4/showTags?q="+id,true);
+	xmlhttp4.open("GET","http://nicholasrio.ap01.aws.af.cm/rest/showTags?q="+id,true);
     xmlhttp4.send();
 }
 
@@ -652,7 +656,7 @@ function showAttachment(id) {
             document.getElementById("attachment").innerHTML = result;
         }
     }
-	xmlhttp5.open("GET","http://localhost/_tubes4/showAttachment?q="+id,true);
+	xmlhttp5.open("GET","http://nicholasrio.ap01.aws.af.cm/rest/showAttachment?q="+id,true);
     xmlhttp5.send();
 }
 
@@ -687,7 +691,7 @@ function showComment(id) {
             document.getElementById("list_comment").innerHTML = result;
         }
     }
-    xmlhttp7.open("GET", "showComment.php?q=" + id, true);
+    xmlhttp7.open("GET", "http://nicholasrio.ap01.aws.af.cm/rest/showComment?q=" + id, true);
     xmlhttp7.send();
 }
 
@@ -715,7 +719,7 @@ function deleteComment(str) {
             }
         }
     }
-	xmlhttp8.open("GET","http://localhost/_tubes4/hapusComment?q="+str,true);
+	xmlhttp8.open("GET","http://nicholasrio.ap01.aws.af.cm/rest/hapusComment?q="+str,true);
     xmlhttp8.send();
 }
 
@@ -727,7 +731,7 @@ function generate_page(id) {
     showComment(id);
 }
 
-function storeComment(id) {
+function storeComment(id,username) {
     var comment = document.getElementById("comment").value;
     if (window.XMLHttpRequest)
     {// code for IE7+, Firefox, Chrome, Opera, Safari
@@ -748,7 +752,7 @@ function storeComment(id) {
             }
         }
     }
-    xmlhttp6.open("GET", "storeComment.php?q=" + comment + "&id=" + id, true);
+    xmlhttp6.open("GET", "http://nicholasrio.ap01.aws.af.cm/rest/storeComment?q=" + comment + "&id=" + id + "&username="+username, true);
     xmlhttp6.send();
 }
 
@@ -777,6 +781,6 @@ function deleteTask(str)
             }
         }
     }
-	xmlhttp.open("GET","http://localhost/_tubes4/hapusTask?q="+str,true);
+	xmlhttp.open("GET","http://nicholasrio.ap01.aws.af.cm/rest/hapusTask?q="+str,true);
     xmlhttp.send();
 }
